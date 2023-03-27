@@ -1,0 +1,55 @@
+@startuml
+actor User
+actor TicketBookingSystem
+participant MovieCatalogService
+participant PaymentService
+
+User -> TicketBookingSystem: Search Movie by Title
+activate TicketBookingSystem
+TicketBookingSystem -> MovieCatalogService: SearchMovieByTitle(title)
+activate MovieCatalogService
+MovieCatalogService --> TicketBookingSystem: MovieListResponse
+deactivate MovieCatalogService
+TicketBookingSystem --> User: Movie List
+deactivate TicketBookingSystem
+
+User -> TicketBookingSystem: Select Movie
+activate TicketBookingSystem
+TicketBookingSystem -> MovieCatalogService: GetMovieDetails(movieId)
+activate MovieCatalogService
+MovieCatalogService --> TicketBookingSystem: MovieDetailsResponse
+deactivate MovieCatalogService
+TicketBookingSystem --> User: Movie Details
+deactivate TicketBookingSystem
+
+User -> TicketBookingSystem: Select Showtime
+activate TicketBookingSystem
+TicketBookingSystem -> MovieCatalogService: GetShowtimes(movieId)
+activate MovieCatalogService
+MovieCatalogService --> TicketBookingSystem: ShowtimeListResponse
+deactivate MovieCatalogService
+TicketBookingSystem --> User: Showtime List
+deactivate TicketBookingSystem
+
+User -> TicketBookingSystem: Select Seats
+activate TicketBookingSystem
+TicketBookingSystem -> MovieCatalogService: ReserveSeats(showtimeId, seatNumbers)
+activate MovieCatalogService
+MovieCatalogService --> TicketBookingSystem: ReservationConfirmationResponse
+deactivate MovieCatalogService
+TicketBookingSystem --> User: Reservation Confirmation
+deactivate TicketBookingSystem
+
+User -> TicketBookingSystem: Proceed to Checkout
+activate TicketBookingSystem
+TicketBookingSystem -> PaymentService: CreatePayment(amount)
+activate PaymentService
+PaymentService -> TicketBookingSystem: PaymentConfirmationResponse
+deactivate PaymentService
+TicketBookingSystem -> MovieCatalogService: ConfirmReservation(showtimeId, reservationId)
+activate MovieCatalogService
+MovieCatalogService --> TicketBookingSystem: ReservationSuccessResponse
+deactivate MovieCatalogService
+TicketBookingSystem --> User: Ticket Confirmation
+deactivate TicketBookingSystem
+@enduml

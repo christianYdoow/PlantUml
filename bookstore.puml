@@ -1,0 +1,41 @@
+@startuml
+actor User
+actor System
+participant Bookstore
+database BookstoreInventoryDb
+
+User -> System: Login
+activate System
+System -> Bookstore: Get Books
+activate Bookstore
+Bookstore -> BookstoreInventoryDb: Get BookstoreInventoryDb
+activate BookstoreInventoryDb
+BookstoreInventoryDb --> Bookstore: BookstoreInventoryDb Data
+deactivate BookstoreInventoryDb
+Bookstore --> System: Book Data
+deactivate Bookstore
+System --> User: Book List
+deactivate System
+
+User -> System: Add Book to Cart
+activate System
+System -> Bookstore: Add Book to Cart
+activate Bookstore
+Bookstore --> System: Cart Data
+deactivate Bookstore
+System --> User: Updated Cart
+deactivate System
+
+User -> System: Proceed to Checkout
+activate System
+System -> Bookstore: Checkout
+activate Bookstore
+Bookstore -> BookstoreInventoryDb: Update BookstoreInventoryDb
+activate BookstoreInventoryDb
+BookstoreInventoryDb --> Bookstore: BookstoreInventoryDb Updated
+deactivate BookstoreInventoryDb
+Bookstore --> System: Order Confirmation
+deactivate Bookstore
+System -> User: Order Confirmation
+deactivate System
+@enduml
